@@ -1,0 +1,34 @@
+flowchart TD
+    %% User Interactions
+    User[User] -->|Access UI| Frontend[Frontend (React/Angular)]
+    Frontend -->|API Requests| Gateway[API Gateway]
+
+    %% Authentication & Authorization
+    Gateway -->|Validate Token| AuthService[Auth Service (OAuth2)]
+    AuthService -->|Issue JWT Token| User[User]
+    AuthService -->|Validate Token| ServiceA
+    AuthService -->|Validate Token| ServiceB
+    AuthService -->|Validate Token| ServiceC
+
+    %% Services & Secure Communication
+    Gateway -->|Route Request| ServiceA[Service A]
+    Gateway -->|Route Request| ServiceB[Service B]
+    Gateway -->|Route Request| ServiceC[Service C]
+    ServiceA -->|mTLS| ServiceB
+    ServiceB -->|mTLS| ServiceC
+    
+    %% Data Security
+    ServiceA -->|Encrypted Data| DatabaseA[(Database A)]
+    ServiceB -->|Encrypted Data| DatabaseB[(Database B)]
+    ServiceC -->|Access Secrets| SecretsManager[Secrets Manager]
+
+    %% Monitoring & Threat Protection
+    ServiceA -->|Log Events| LogAggregator[Log Aggregation (ELK Stack)]
+    ServiceB -->|Log Events| LogAggregator
+    ServiceC -->|Log Events| LogAggregator
+    Gateway -->|Monitor Traffic| WAF[Web Application Firewall]
+    WAF -->|Detect Threats| ThreatDetection[Intrusion Detection System (IDS)]
+
+    %% External Integrations
+    ServiceC -->|Secure API Call| ThirdPartyAPI[Third-Party API]
+    ThirdPartyAPI -->|Response| ServiceC
